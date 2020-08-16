@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 import datefinder
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
 def authenticate_google():
