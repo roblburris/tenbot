@@ -12,12 +12,10 @@ actions:
   - respond_faq
 
 entities:
-  - company
-  - job_function
-  - person_name
-  - budget
-  - business_email
-  - use_case
+  - patient_name
+  - patient_number
+  - patient_email
+  - patient_reason
 
 responses:
   utter_noworries:
@@ -26,49 +24,28 @@ responses:
     - text: Hi
   utter_bye:
     - text: Bye!
-  utter_ask_business_email:
-    - text: What's your business email?
-  utter_ask_company:
-    - text: What company do you work for?
-  utter_ask_budget:
-    - text: "What's your annual budget for conversational AI? 💸"
-  utter_ask_job_function:
-    - text: "What's your job? 🕴"
-  utter_ask_person_name:
-    - text: "What's your name?"
-  utter_ask_use_case:
-    - text: What's your use case?
-  utter_explain_why_budget:
-  - text: We need to know your budget to recommend a subscription
-  utter_explain_why_email:
-  - text: We need your email so we can contact you
+  utter_ask_patient_name:
+    - text: What's your name?
+  utter_ask_patient_number:
+    - text: What's your phone number?
+  utter_ask_patient_email:
+    - text: What's your email?
+  utter_ask_patient_reason:
+    - text: What's your reason for scheduling an appointment today?
   utter_out_of_scope:
   - text: Sorry, I can’t handle that request.
 
-
 slots:
-  company:
+  patient_name:
     type: unfeaturized
-  job_function:
+  patient_number:
     type: unfeaturized
-  person_name:
+  patient_email:
     type: unfeaturized
-  budget:
+  patient_reason:
     type: unfeaturized
-  business_email:
-    type: unfeaturized
-  use_case:
-    type: unfeaturized
-  requested_slot:
-    type: categorical
-    values:
-      - business_email
-      - company
-      - person_name
-      - use_case
-      - budget
-      - job_function
+
 
 forms:
-  - sales_form
+  - patient_appointment
 

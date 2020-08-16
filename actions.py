@@ -6,21 +6,19 @@ from rasa_sdk import Action
 from rasa_sdk.events import UserUtteranceReverted
 
 
-class SalesForm(FormAction):
-    """Collects sales information and adds it to the spreadsheet"""
+class AppointmentScheduler(FormAction):
+    """Schedules appointment"""
 
     def name(self):
-        return "sales_form"
+        return "patient_appointment"
 
     @staticmethod
     def required_slots(tracker):
         return [
-            "job_function",
-            "use_case",
-            "budget",
-            "person_name",
-            "company",
-            "business_email",
+            "patient_name",
+            "patient_number",
+            "patient_email",
+            "patient_reason"
         ]
 
 

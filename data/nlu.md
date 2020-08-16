@@ -60,39 +60,33 @@
 - I would like to talk to someone from your sales team
 - sales please
 
+## regex:patient_email
+- \<(.*)@(.*).com\>
+
+## regex:patient_reason
+- .*
+
+## lookup:patient_name
+training-data/names.txt
+
+
 ## intent:inform
-- [100k](budget)
-- [100k](budget)
-- [240k/year](budget)
-- [150,000 USD](budget)
-- I work for [Rasa](company)
-- The name of the company is [ACME](company)
-- company: [Rasa Technologies](company)
-- it's a small company from the US, the name is [Hooli](company)
-- it's a tech company, [Rasa](company)
-- [ACME](company)
-- [Rasa Technologies](company)
-- [maxmeier@firma.de](business_email)
-- [bot-fan@bots.com](business_email)
-- [maxmeier@firma.de](business_email)
-- [bot-fan@bots.com](business_email)
-- [my email is email@rasa.com](business_email)
-- [engineer](job_function)
-- [brand manager](job_function)
-- [marketing](job_function)
-- [sales manager](job_function)
-- [growth manager](job_function)
-- [CTO](job_function)
-- [CEO](job_function)
-- [COO](job_function)
-- [John Doe](person_name)
-- [Jane Doe](person_name)
-- [Max Mustermann](person_name)
-- [Max Meier](person_name)
-- We plan to build a [sales bot](use_case) to increase our sales by 500%.
-- we plan to build a [sales bot](use_case) to increase our revenue by 100%.
-- a [insurance tool](use_case) that consults potential customers on the best life insurance to choose.
-- we're building a [conversational assistant](use_case) for our employees to book meeting rooms.
+- My name is [Peter Parker](patient_name)
+- name [Jian Yang](patient_name)
+- [Tyler Blevins](patient_name)
+- I'm [Brad Pitt](patient_name)
+- my phone num is [4250691213](patient_number]
+- My phone number [423-341-8903](patient_number]
+- number is [(425)-900-9142](patient_number)
+- [415 672 4623](patient_number)
+- My email is [john.doe@gmail.com](patient_email)
+- Email [jakcks@hotmail.com](patient_email)
+- [bachmann-erlich@yahoo.com](patient_email)
+- [rich-ehndricsk@outlook.com](patient_email)
+- I want to see the doctor because [I have a sore throat](patient_reason)
+- [need more medication](patient_reason)
+- I'm interested in discussing [new treatment options](patient_reason)
+- [I think I have COVID-19](patient_reason)
 
 
 ## intent:explain
