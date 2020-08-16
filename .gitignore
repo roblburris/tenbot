@@ -1,2 +1,4 @@
 __pycache__
 results
+user_secrets.json
+client_secrets.json
