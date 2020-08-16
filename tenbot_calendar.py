@@ -5,12 +5,15 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from constants import *
+from datetime import datetime, timedelta
+import datefinder
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
-def main():
+def authenticate_google():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -33,22 +36,46 @@ def main():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-    service = build('calendar', 'v3', credentials=creds)
+    return build('calendar', 'v3', credentials=creds)
 
-    # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+def find_date(start_time):
+    matches = list(datefinder.find_dates(start_time))
+    if len(matches):
+        return matches[0]
 
 
-if __name__ == '__main__':
-    main()
+def schedule_appointment(service, patient_name, start_time, duration, reason):
+    working_event = event.copy()
+    start_time = find_date(start_time)
+    end_time = start_time + timedelta(hours=duration)
+
+    working_event['summary'] = 'Appointment with ' + str(patient_name)
+    working_event['start']['dateTime'] = start_time.strftime("%Y-%m-%dT%H:%M:%S") 
+    working_event['end']['dateTime'] = end_time.strftime("%Y-%m-%dT%H:%M:%S")
+    working_event['description'] = reason
+
+    return service.events().insert(calendarId='primary', body=working_event).execute()
+
+
+def find_appointment(service, patient_name, start_time):
+    all_appointments = service.calendarList().list.execute()
+    not_found = True
+    desired_app = None
+    start_time = find_date(start_time)
+
+    for app in all_appointments:
+        if app['summary'][17:] == patient_name and app['start']['dateTime'] == start_time:
+            desired_app = app
+            break
+    
+    return desired_app
+
+def remove_appointment(service, desired_app):
+    return service.events().delete(calendarId=desired_app['id'], eventId=desired_app['etag']).execute()
+
+def edit_appointment(service, desired_app):
+    ''' TODO: write edit_appointment once rasa is finished''' 
+
+
+service = authenticate_google()
+schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
