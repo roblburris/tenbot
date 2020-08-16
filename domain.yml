@@ -4,6 +4,7 @@ intents:
   - thank
   - faq
   - contact_sales
+  - schedule_meeting
   - inform
   - out_of_scope
 

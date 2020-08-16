@@ -19,8 +19,8 @@
     - patient_appointment
     - form{"name": null}
 
-## sales form
-* contact_sales
+## patient appointment
+* schedule_meeting
     - patient_appointment                   <!--Run the sales_form action-->
     - form{"name": "patient_appointment"}   <!--Activate the form-->
     - form{"name": null}           <!--Deactivate the form-->

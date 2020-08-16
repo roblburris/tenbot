@@ -69,6 +69,18 @@
 ## lookup:patient_name
 training-data/names.txt
 
+## intent:schedule_meeting
+- I want to schedule a meeting
+- I want to schedule meeting
+- I want to schedule a meeting.
+- Schedule a appointment
+- please schedule an appointment
+- I want to go to the dentist
+- I want to arrange a meeting with Dr. Chad
+- Schedule appointment
+- Arrange doctors appointment
+- arrange doctors appointment please
+
 
 ## intent:inform
 - My name is [Peter Parker](patient_name)

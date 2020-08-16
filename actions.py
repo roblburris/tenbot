@@ -6,7 +6,7 @@ from rasa_sdk import Action
 from rasa_sdk.events import UserUtteranceReverted
 
 
-class AppointmentScheduler(FormAction):
+class PatientAppointment(FormAction):
     """Schedules appointment"""
 
     def name(self):
