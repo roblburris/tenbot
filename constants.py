@@ -22,3 +22,16 @@ event = {
     ]  
     },
 }
+
+freebusy = {
+    "calendarExpansionMax": 42, # Maximal number of calendars for which FreeBusy information is to be provided. Optional. Maximum value is 50.
+    "groupExpansionMax": 42, 
+    "timeMax": "A String", 
+    "items": [ # List of calendars and/or groups to query.
+      {
+        "id": "primary", # The identifier of a calendar or a group.
+      },
+    ],
+    "timeMin": "A String", # The start of the interval for the query formatted as per RFC3339.
+    "timeZone": timezone, # Time zone used in the response. Optional. The default is UTC.
+}

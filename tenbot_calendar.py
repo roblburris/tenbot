@@ -76,8 +76,18 @@ def remove_appointment(service, desired_app):
 def edit_appointment(service, desired_app):
     ''' TODO: write edit_appointment once rasa is finished''' 
 
+def find_open_times(service, start_time):
+    working_body = freebusy.copy()
+    start_time = find_date(start_time)
+    end_time = start_time + timedelta(hours=8)
+    
+    working_body['timeMin'] = start_time.strftime("%m/%d/%Y, %H:%M:%S")
+    working_body['timeMax'] = end_time.strftime("%m/%d/%Y, %H:%M:%S")
+    results = service.freebusy().query(body=working_body).execute()
+    print(results['calendars'])
 
 service = authenticate_google()
-schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
-app = find_appointment(service, 'Jane Doe', 'blank 2')
-remove_appointment(service, app)
+find_open_times(service, '24 August 8am')
+#schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
+#app = find_appointment(service, 'Jane Doe', 'blank 2')
+#remove_appointment(service, app)
