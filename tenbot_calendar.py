@@ -78,6 +78,6 @@ def edit_appointment(service, desired_app):
 
 
 service = authenticate_google()
-# schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
+schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
 app = find_appointment(service, 'Jane Doe', 'blank 2')
 remove_appointment(service, app)
