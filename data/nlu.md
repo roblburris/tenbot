@@ -89,10 +89,6 @@
 ## regex:patient_reason
 - .*
 
-## regex:date_style_1
-- \<[0-9]+/[0-9]{2}/[0-9]{2}\> 
-
-
 
 ## intent:inform
 - [John Doe](patient_name)
@@ -442,7 +438,12 @@
 - [need more medication](patient_reason)
 - I'm interested in discussing [new treatment options](patient_reason)
 - [I think I have COVID-19](patient_reason)
-
+- I want my appointment scheduled on [24 August 8am](patient_date)
+- appointment at [24 December 12pm](patient_date)
+- Visit doctor at [5 February 3:45pm](patient_date)
+- doctor at [8am](patient_time)
+- [10:32am](patient_time)
+- I want to see the doctor at [2:00pm](patient_time) 
 
 ## intent:explain
 - why

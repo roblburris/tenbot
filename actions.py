@@ -33,7 +33,6 @@ class AppointmentScheduler(FormAction):
             "patient_email",
             "patient_reason",
             "patient_date",
-            "patient_avail",
             "patient_time",
         ]
 
@@ -73,19 +72,6 @@ class AppointmentScheduler(FormAction):
             dispatcher.utter_message("I'm busy from " + str(time_pair[0]) + " to " + str(time_pair[1]))
         
         return {"patient_date": orig_date}        
-
-
-    def validate_patient_avail(
-            self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]
-        ) -> List[Dict]:
-        
-        bool_avail = tracker.get_slot("patient_avail")
-        if not bool_avail:
-            return {"patient_date": None, "patient_avail": None}
-        return {"patient_avail": bool_avail}
 
     
     def validate_patient_time(
@@ -129,7 +115,9 @@ class AppointmentScheduler(FormAction):
             "patient_name": self.from_entity(entity="patient_name"),
             "patient_number": self.from_entity(entity="patient_number"),
             "patient_email": self.from_entity(entity="patient_email"),
-            "patient_reason": [self.from_entity(entity="patient_reason"), self.from_text()]
+            "patient_reason": [self.from_entity(entity="patient_reason"), self.from_text()],
+            "patient_date": self.from_entity(entity="patient_date"),
+            "patient_time": self.from_entity(entity="patient_time")
         }
     
 

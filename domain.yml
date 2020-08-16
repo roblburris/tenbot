@@ -18,7 +18,8 @@ entities:
   - patient_number
   - patient_email
   - patient_reason
-
+  - patient_date
+  - patient_time
 
 responses:
   utter_noworries:
@@ -35,6 +36,10 @@ responses:
     - text: What's your email?
   utter_ask_patient_reason:
     - text: What's your reason for scheduling an appointment today?
+  utter_ask_patient_date:
+    - text: What day would you like your appointment scheduled for?
+  utter_ask_patient_time:
+    - text: What time would you like your appointment scheduled for?
   utter_out_of_scope:
     - text: Sorry, I can’t handle that request.
 
@@ -47,6 +52,11 @@ slots:
     type: unfeaturized
   patient_reason:
     type: unfeaturized
+  patient_date:
+    type: unfeaturized
+  patient_time:
+    type: unfeaturized
+
 
 forms:
   - patient_appointment
