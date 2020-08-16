@@ -5,7 +5,6 @@ from rasa_sdk import Tracker
 from rasa_sdk import Action
 from rasa_sdk.events import UserUtteranceReverted
 from tenbot_calendar import *
-from __future__ import print_function
 import datetime
 import pickle
 import os.path
@@ -39,6 +38,7 @@ class AppointmentScheduler(FormAction):
 
     def validate_patient_reason(
             self,
+            value: Text,
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]
@@ -55,27 +55,30 @@ class AppointmentScheduler(FormAction):
         dispatcher.utter_message("Email: " + str(email[0]))
         dispatcher.utter_message("Reason for Visit: " + str(reason))
        
-        return {"patient_reason": reason} 
+        # return {"patient_reason": reason} 
+        return []
 
-   def validate_patient_date(
-            self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]
-        ) -> List[Dict]:
+    def validate_patient_date(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]
+    ) -> List[Dict]:
        
         orig_date = tracker.get_slot("patient_date")
-        date = find_date(orig_date)
+        date = find_date("16 August 8am")
         
         busy_times = find_busy_times(service, date)
         for time_pair in busy_times:
             dispatcher.utter_message("I'm busy from " + str(time_pair[0]) + " to " + str(time_pair[1]))
         
-        return {"patient_date": orig_date}        
-
+        # return {"patient_date": orig_date}        
+        return []
     
     def validate_patient_time(
             self,
+            value: Text,
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]
@@ -85,8 +88,9 @@ class AppointmentScheduler(FormAction):
         name = tracker.get_slot(patient_name)
         reason = tracker.get_slot(patient_reason)
         
-        schedule_appointment(service, name, time, 1.5, reason)
-        return{"patient_time":pat_time}        
+        schedule_appointment(service, name, '16 August 8am', 1.5, reason)
+        # return{"patient_time":pat_time}        
+        return []
 
     def submit(
             self,
@@ -116,8 +120,8 @@ class AppointmentScheduler(FormAction):
             "patient_number": self.from_entity(entity="patient_number"),
             "patient_email": self.from_entity(entity="patient_email"),
             "patient_reason": [self.from_entity(entity="patient_reason"), self.from_text()],
-            "patient_date": self.from_entity(entity="patient_date"),
-            "patient_time": self.from_entity(entity="patient_time")
+            "patient_date": [self.from_entity(entity="patient_date"), self.from_text()],
+            "patient_time": [self.from_entity(entity="patient_time"), self.from_text()]
         }
     
 
