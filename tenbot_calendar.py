@@ -57,25 +57,27 @@ def schedule_appointment(service, patient_name, start_time, duration, reason):
     return service.events().insert(calendarId='primary', body=working_event).execute()
 
 
-def find_appointment(service, patient_name, start_time):
-    all_appointments = service.calendarList().list.execute()
+def find_appointment(service, patient_name, desired_description):
+    all_appointments = service.events().list(calendarId='primary').execute()
+
     not_found = True
     desired_app = None
-    start_time = find_date(start_time)
-
-    for app in all_appointments:
-        if app['summary'][17:] == patient_name and app['start']['dateTime'] == start_time:
+    for app in all_appointments['items']:
+        summary = app['summary']
+        if summary[17:] == patient_name and app['description'] == desired_description:
             desired_app = app
             break
     
     return desired_app
 
 def remove_appointment(service, desired_app):
-    return service.events().delete(calendarId=desired_app['id'], eventId=desired_app['etag']).execute()
+    return service.events().delete(calendarId='primary', eventId=desired_app['id']).execute()
 
 def edit_appointment(service, desired_app):
     ''' TODO: write edit_appointment once rasa is finished''' 
 
 
 service = authenticate_google()
-schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
+# schedule_appointment(service, 'Jane Appleseed', '24 August 8am', 2, 'COVID Test')
+app = find_appointment(service, 'Jane Doe', 'blank 2')
+remove_appointment(service, app)
