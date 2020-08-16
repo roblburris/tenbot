@@ -5,9 +5,19 @@ from rasa_sdk import Tracker
 from rasa_sdk import Action
 from rasa_sdk.events import UserUtteranceReverted
 from tenbot_calendar import *
+from __future__ import print_function
+import datetime
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from constants import *
+from datetime import datetime, timedelta
+import datefinder
+
 
 service = authenticate_google()
-
 
 class AppointmentScheduler(FormAction):
     """Schedules appointment"""
@@ -23,7 +33,8 @@ class AppointmentScheduler(FormAction):
             "patient_email",
             "patient_reason",
             "patient_date",
-            "patient_avail"
+            "patient_avail",
+            "patient_time",
         ]
 
 
@@ -48,15 +59,48 @@ class AppointmentScheduler(FormAction):
         return {"patient_reason": reason} 
 
    def validate_patient_date(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]
         ) -> List[Dict]:
        
-        date = tracker.get_slot("patient_date")
-         
+        orig_date = tracker.get_slot("patient_date")
+        date = find_date(orig_date)
+        
+        busy_times = find_busy_times(service, date)
+        for time_pair in busy_times:
+            dispatcher.utter_message("I'm busy from " + str(time_pair[0]) + " to " + str(time_pair[1]))
+        
+        return {"patient_date": orig_date}        
 
+
+    def validate_patient_avail(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]
+        ) -> List[Dict]:
+        
+        bool_avail = tracker.get_slot("patient_avail")
+        if not bool_avail:
+            return {"patient_date": None, "patient_avail": None}
+        return {"patient_avail": bool_avail}
+
+    
+    def validate_patient_time(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]
+        ) -> List[Dict]:
+
+        pat_time = tracker.get_slot(patient_time)
+        name = tracker.get_slot(patient_name)
+        reason = tracker.get_slot(patient_reason)
+        
+        schedule_appointment(service, name, time, 1.5, reason)
+        return{"patient_time":pat_time}        
 
     def submit(
             self,
@@ -65,6 +109,18 @@ class AppointmentScheduler(FormAction):
             domain: Dict[Text, Any],
         ) -> List[Dict]:
 
+        name = tracker.get_slot("patient_name")
+        number = tracker.get_slot("patient_number")
+        email = tracker.get_slot("patient_email")
+        reason = tracker.get_slot("patient_reason")
+        pat_time = tracker.get_slot("patient_time")
+
+        dispatcher.utter_message("Great! Your appointmet is scheduled. Here is the info for your upcoming appointment:")
+        dispatcher.utter_message("Name: " + str(name[0]))
+        dispatcher.utter_message("Phone Number: " + str(number))
+        dispatcher.utter_message("Email: " + str(email[0]))
+        dispatcher.utter_message("Reason for Visit: " + str(reason))
+        dispatcher.utter_message("Appointment Time: " + str(find_appointment(service, name, reason)['start']['dateTime'][11:16]))
         return []
 
 
