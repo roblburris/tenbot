@@ -66,7 +66,7 @@ class AppointmentScheduler(FormAction):
         domain: Dict[Text, Any]
     ) -> List[Dict]:
        
-        orig_date = tracker.get_slot("patient_date")
+        # orig_date = tracker.get_slot("patient_date")
         date = find_date("16 August 8am")
         
         busy_times = find_busy_times(service, date)
@@ -84,7 +84,7 @@ class AppointmentScheduler(FormAction):
             domain: Dict[Text, Any]
         ) -> List[Dict]:
 
-        pat_time = tracker.get_slot(patient_time)
+        # pat_time = tracker.get_slot(patient_time)
         name = tracker.get_slot(patient_name)
         reason = tracker.get_slot(patient_reason)
         
@@ -120,8 +120,8 @@ class AppointmentScheduler(FormAction):
             "patient_number": self.from_entity(entity="patient_number"),
             "patient_email": self.from_entity(entity="patient_email"),
             "patient_reason": [self.from_entity(entity="patient_reason"), self.from_text()],
-            "patient_date": [self.from_entity(entity="patient_date"), self.from_text()],
-            "patient_time": [self.from_entity(entity="patient_time"), self.from_text()]
+            "patient_date": self.from_entity(entity="patient_date"),
+            "patient_time": self.from_entity(entity="patient_time")
         }
     
 
